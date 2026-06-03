@@ -1,0 +1,20 @@
+{
+  "name": "operator-kit",
+  "description": "operator-kit: a Claude Code framework for an AI operator that turns strategy into dispatched GitHub-issue tasks for downstream worker repos. This marketplace ships the worker-side plugin.",
+  "owner": {
+    "name": "Piotr Jurczenko",
+    "email": "16348752+pjurczen@users.noreply.github.com"
+  },
+  "plugins": [
+    {
+      "name": "operator-worker",
+      "description": "Downstream worker side of the operator-kit dispatch pipeline: the working-agent-tasks skill + /work-queue command that pick up operator-dispatched `agent-task` GitHub issues and drive them to PRs via the shared label/PR contract, using each repo's own development methodology.",
+      "version": "0.1.0",
+      "source": "./plugins/operator-worker",
+      "author": {
+        "name": "Piotr Jurczenko",
+        "email": "16348752+pjurczen@users.noreply.github.com"
+      }
+    }
+  ]
+}

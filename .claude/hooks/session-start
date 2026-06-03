@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# SessionStart hook: inject the operator orientation into each session.
+# Reads operator-orientation.md and emits it as additionalContext so the
+# operator starts every session knowing its role and which skills to reach for.
+set -euo pipefail
+
+DIR="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
+ORIENTATION="$DIR/.claude/operator-orientation.md"
+
+[ -f "$ORIENTATION" ] || exit 0
+
+# JSON-escape the file contents and emit the SessionStart hook payload.
+python3 - "$ORIENTATION" <<'PY'
+import json, sys
+text = open(sys.argv[1], encoding="utf-8").read()
+print(json.dumps({
+    "hookSpecificOutput": {
+        "hookEventName": "SessionStart",
+        "additionalContext": text,
+    }
+}))
+PY
