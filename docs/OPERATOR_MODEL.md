@@ -29,31 +29,29 @@ The operator *reads* these to drive the board; workers *write* these as they pro
 ## Diagram
 
 ```
- ┌─ operator repo ── owns the board + GitHub-issue coordination ──────────────┐
- │  strategy → spec (docs/handoffs/) → DISPATCH:                               │
- │     • create GitHub issue in target repo (label agent-task, spec inlined)  │
- │     • create / attach a board subtask under the feature task · DON'T wait  │
- │                                                                             │
- │  WATCH (poll the issues/PRs it created) → REACT:                           │
- │     • issue/PR state changed?  → update the board task status              │
- │     • agent:blocked            → surface to a human                        │
- │     • PR merged / issue closed → mark the subtask done (parent rolls up)   │
- └──────────────┬────────────────────────────────────────▲───────────────────┘
-       creates  │ issue                            reads  │ issue + PR state
-                ▼                                          │ (operator's poll loop)
-   ┌──────── GitHub issues = the INTERFACE / contract ─────────┐
-   │  labels: agent-task → agent:in-progress → agent:in-review  │
-   │          | agent:blocked   ·   PR references the issue      │
-   └────────────────────────────┬───────────────────────────────┘
-                                │  consumed however the repo likes
-                                ▼
-   ╔═══ downstream repo ── OPAQUE to the operator ══════════════════════╗
-   ║  its own local loop (the operator-worker plugin) picks up agent-task ║
-   ║  issues, does the work, opens a PR, updates labels/comments         ║
-   ╚══════════════════════════════════════════════════════════════════════╝
-                                │
-                                ▼
-            PR → HUMAN reviews + merges (the gate) → issue closed
+┌──────────────── operator repo (coordinator) ─────────────────┐
+│ sense → decide → act → track                                 │
+│                                                              │
+│ DISPATCH   open a GitHub issue (agent-task,                  │
+│            spec inlined) + mirror on the board               │
+│ WATCH      poll issues/PRs · update the board ·              │
+│            surface agent:blocked · close on merge            │
+└───────────────────┬──────────────────────────────────────────┘
+                    │   operator creates the issue ↓  and polls it back ↑
+                    ▼
+┌─────────── GitHub issues = the contract / the bus ───────────┐
+│ agent-task → agent:in-progress → agent:in-review             │
+│ agent:blocked    ·    PR references the issue                │
+└───────────────────┬──────────────────────────────────────────┘
+                    │   consumed however the repo likes
+                    ▼
+┌────────── downstream repo (opaque to the operator) ──────────┐
+│ its own local loop (operator-worker plugin)                  │
+│ claims an agent-task issue, builds it, opens a               │
+│ PR, and drives the contract labels                           │
+└───────────────────┬──────────────────────────────────────────┘
+                    ▼
+        PR → a human reviews + merges → issue closed
 ```
 
 ## Why the issue carries the spec
