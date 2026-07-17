@@ -1,0 +1,15 @@
+# Canonical operator<->worker contract label set — name|color|description
+# Machine-readable source of truth. Consumed by bootstrap-labels.sh; check.sh
+# asserts set-equality with the label table in docs/OPERATOR_MODEL.md and that
+# label literals used across skills/docs are members of this set.
+# (Lane labels `worker:<lane>` color 5319e7 are parametric, created per-repo
+# when sharding is enabled; not part of the bootstrap set.)
+agent-task|0052cc|Claimable by a downstream worker
+agent:in-progress|fbca04|Worker has claimed and is building
+agent:in-review|0e8a16|PR open, awaiting human merge
+agent:blocked|d73a4a|Needs a human to unblock
+priority:high|b60205|High priority
+priority:medium|d4a72c|Medium priority
+priority:low|c5def5|Low priority
+needs-triage|fbca04|Worker->operator inbox flag (operator triages + applies contract labels)
+needs-human|d93f0b|Operator-triaged: blocked on a human action/decision/resource (the human's queue)
