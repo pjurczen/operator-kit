@@ -1,8 +1,10 @@
 # Board reference
 
-Shared mechanics for the **status board** — used by `dispatch-handoff` (create the task) and `monitor-handoff` (update it). The board is the **human status view**, mirrored from GitHub issue/PR state. It is *not* the source of truth — the issues are. The board just makes in-flight work legible to people.
+Shared mechanics for the **work-stream status view** — used by `dispatch-handoff` (reflect the dispatch) and `monitor-handoff` (update it as work moves). It is the **agent-work status view**, mirrored from GitHub issue/PR state. It is *not* the source of truth — the issues are. It just makes in-flight work legible.
 
-Reference implementation here is **Asana via its MCP server**, but the model is tool-agnostic — adapt it to Linear / Jira / a project board. Put your concrete IDs in [`CONFIG.md`](../../CONFIG.md), not here.
+This is a **separate surface** from the human-task tracker ([`human-tasks.md`](human-tasks.md)): the board mirrors *agent-work status*; the human-task tracker holds *human actions only* and must **never** mirror agent-work status. Keep them distinct.
+
+Implement the status view however fits your operation — an **in-repo roadmap doc** (edited in place, versioned) or a **project board** (Asana / Linear / Jira via its MCP server). Put your choice + concrete IDs/path in [`CONFIG.md`](../../CONFIG.md), not here.
 
 ## Model: one feature → many issues (1 : N)
 A feature often spans repos (e.g. backend **and** frontend), so it's **one board task : many GitHub issues**, not 1:1:
