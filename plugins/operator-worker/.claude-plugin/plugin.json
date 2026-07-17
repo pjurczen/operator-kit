@@ -1,7 +1,7 @@
 {
   "name": "operator-worker",
-  "description": "Downstream worker side of the operator-kit dispatch pipeline: the working-agent-tasks skill + /work-queue command that pick up operator-dispatched `agent-task` GitHub issues and drive them to PRs via the shared label/PR contract, using each repo's own development methodology.",
-  "version": "0.1.0",
+  "description": "Downstream worker side of the operator-kit dispatch pipeline: the working-agent-tasks + raising-issues skills and /work-queue command that pick up operator-dispatched `agent-task` GitHub issues and drive them to merged, closed-out PRs via the shared label/PR contract — attended or autonomous, using each repo's own development methodology.",
+  "version": "0.2.0",
   "author": {
     "name": "Piotr Jurczenko",
     "email": "16348752+pjurczen@users.noreply.github.com"
