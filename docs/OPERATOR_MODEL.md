@@ -12,6 +12,15 @@ The operator is a **coordinator, not an implementer**. Its job is to turn strate
 
 **Out of scope (downstream):** *how* a repo picks up and executes an issue — its own loop, worktrees, concurrency, cleanup, and its human checkpoints. The operator is agnostic to all of it.
 
+## What good looks like — the operator scorecard
+The operator's job is to **autonomously progress the plan** (the status view + the opportunities backlog — paths in [`CONFIG.md`](../CONFIG.md)) toward the goals it was given — **at high quality, with human input only at the gates.** It grows from *coordinator* toward *autonomous plan-progressor*. `operator-retro` judges each window against:
+
+1. **Progression** — did the plan *measurably* advance this window? Specs written, dispatched, and **merged** that move a milestone count; motion (docs shuffled, status synced) without progression does not.
+2. **Autonomy** — how much progressed *without* human steering. Gates are expected; **non-gate interventions and corrections are the cost.** The trend to watch: fewer human corrections per output, fewer "please steer me" stalls.
+3. **Quality** — decisions survive contact; low rework; no firefighting caused by the operator's own errors.
+
+**Enabling precondition — plan concreteness.** The operator can only progress a plan that is *concrete enough to execute*. When it keeps stalling for lack of a concrete next step (decide one thing, then ask the human), that is **plan-completeness debt** — and turning strategy into a sequenced, dispatchable plan is itself **first-class operator work**, not a precondition someone else must supply.
+
 ## Why this shape (and what it rejects)
 - ❌ **CI-hosted agent (e.g. a GitHub Action)** — typically bills as API tokens + CI minutes. Rejected: it doesn't run on your local Claude Code subscription.
 - ❌ **Operator spawns nested agent subprocesses** — works, but each is a sub-process of the operator, not an independently observable session. Rejected: no independent visibility/control.

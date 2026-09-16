@@ -38,6 +38,14 @@ Recommendation: (decision tasks only) the operator's rec + one-line why.
 4. **Updating an existing task? Verify its premises against current reality first** (is the surface now live? the gap already fixed? the ask superseded?) — rewrite to the present or complete it; never polish a stale premise into confident prose.
 5. **Proper names sourced from auto-transcripts are needs-confirm.** Before a transcript-sourced name lands in a task, an assignment, or a person record: check it against known contacts, or flag it ("name per transcript — confirm").
 
+## Sub-tasks — a multi-step task must show its middle
+A task whose only states are *untouched* and *finished* hides every bit of progress in between, so a week of real work reads as no movement. Multi-step items carry intermediary sub-tasks.
+
+- **Shape:** create the parent, then each step as a child sub-task with the same assignee. The **parent** carries the Context / Goal / Done-when; each **sub-task is one checkable step** — a short imperative line, no notes needed.
+- **When NOT to:** a genuinely single-step item stays a lone task. Don't manufacture ceremony to look thorough.
+- **Sub-tasks encode sequencing a note cannot.** A step that waits on something else ("wait for the re-runs to finish") is visible as its own unchecked box, so the blocker is obvious rather than buried in prose.
+- **Completion:** sub-tasks tick as the work happens; the parent completes when its Done-when is met.
+
 ## Mechanics
 - **Dedup before create:** search the tracker (open tasks, text = the issue/PR number or slug). One task per item — update, don't duplicate.
 - **Complete** the tick the item clears (merged / decided / sent). Stale-open tasks whose items vanished → verify against the primary source, then complete with a one-line note.
