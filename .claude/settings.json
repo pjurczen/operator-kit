@@ -19,13 +19,22 @@
       "Bash(gh api repos/*)",
       "Bash(gh label create:*)",
       "Bash(date:*)",
-      "Bash(git log:*)"
+      "Bash(ls:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(git push:*)"
+    ],
+    "deny": [
+      "Read(./private/**)"
     ]
   },
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|clear|compact",
+        "matcher": "startup|resume|clear|compact",
         "hooks": [
           { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start\"", "async": false }
         ]

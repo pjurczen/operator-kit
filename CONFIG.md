@@ -50,3 +50,6 @@ Enable the worker side in each downstream repo:
    - Attended (a human driving): `/loop /operator-worker:work-queue`
    - Autonomous (unattended): `WORKER_MODE=autonomous claude`, then `/loop /operator-worker:work-queue`
    - Sharded (N workers on one repo): launch each with `WORKER_ID=<lane>` and lane-label every dispatch.
+
+## 10 · Sensitive directories
+`.claude/settings.json` ships one deny rule as an example — `Read(./private/**)` — for a directory that must never reach a session's context (personal notes, exported transcripts, credentials). Point it at your own sensitive paths, or remove it; keep such directories gitignored as well, since a deny rule guards the session, not the repo.
