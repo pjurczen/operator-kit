@@ -2,6 +2,16 @@
 name: monitor-handoff
 description: The operator's watch-&-react poll — read the dispatched GitHub issues across downstream repos, reflect their state on the status view, triage worker-raised issues, proof-read merge gates, and surface anything a human must act on. Use to check on in-flight work, sync status, after every dispatch, or as the steady-state loop tick.
 when_to_use: Checking in-flight/dispatched work ("what's the status", "any blockers", "sync the status view"), immediately after any dispatch, before ending a session with work in flight, and as operator-cycle's sense step. NOT for dispatching (dispatch-handoff) or generating new work (find-opportunities).
+allowed-tools:
+  - Bash(gh issue list:*)
+  - Bash(gh issue view:*)
+  - Bash(gh issue edit:*)
+  - Bash(gh issue close:*)
+  - Bash(gh issue comment:*)
+  - Bash(gh pr list:*)
+  - Bash(gh pr view:*)
+  - Bash(gh api repos/*)
+  - Bash(bash scripts/monitor-status.sh)
 ---
 
 # Monitor handoffs (watch & react)

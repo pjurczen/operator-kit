@@ -2,6 +2,12 @@
 name: dispatch-handoff
 description: Dispatch a ready handoff spec to a downstream repo by opening a labeled GitHub issue (spec inlined) and reflecting it on the status view. Use to send/hand off already-specced work to a downstream repo — the moment a spec is settled and unblocked. Requires the spec in docs/handoffs/ (else write-handoff first).
 when_to_use: Sending specced work downstream ("dispatch this", "open the issue for the worker", "release the queued item"). Requires the spec in docs/handoffs/. NOT for authoring specs (write-handoff) or watching dispatched work (monitor-handoff).
+allowed-tools:
+  - Bash(gh issue create:*)
+  - Bash(gh issue edit:*)
+  - Bash(gh issue list:*)
+  - Bash(gh search issues:*)
+  - Bash(bash scripts/bootstrap-labels.sh:*)
 ---
 
 # Dispatch a handoff (open the GitHub issue)

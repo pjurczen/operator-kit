@@ -2,6 +2,11 @@
 name: operator-cycle
 description: The operator's top-level autonomous loop — each tick senses current state, decides the next highest-value move, acts, and tracks outcomes, always emitting the human-task checklist. Use as the recurring operator tick, whenever asked "what should we do next", or to run operations.
 when_to_use: Running operations, the recurring tick, "what should we do next", "run the loop", resuming operator work. Owns the general "what next" question — Decide invokes find-opportunities when candidates run short. NOT for a lone status check (monitor-handoff) or backlog generation alone (find-opportunities).
+allowed-tools:
+  - Bash(bash scripts/monitor-status.sh)
+  - Bash(gh issue list:*)
+  - Bash(gh pr list:*)
+  - Bash(gh pr view:*)
 ---
 
 # Operator cycle — the autonomous loop
