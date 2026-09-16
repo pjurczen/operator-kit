@@ -37,9 +37,11 @@ Strategy and "what to do next" are decided here → an above-bar feature is desi
 ## Conventions when editing
 - **Dates absolute** (`2026-07-02`); update `Last updated:` footers on operational/roadmap docs.
 - **Heavy cross-linking** — keep relative links + nav blocks consistent; broken internal links are this repo's top correctness risk.
-- **Skills are clean, timeless procedures:** imperative steps; one `## Disciplines` block max (one-line rules); **no incident stories, issue numbers, or dates in skill bodies**. New/materially-reworked skills go through **`skill-creator`**; direct edits only for small fixes.
+- **Skills are clean, timeless procedures:** imperative steps; one `## Disciplines` block max (one-line rules); **no incident stories, issue numbers, dates, or current-objective content in skill bodies** (a procedure derives the objective from the living status doc). New/materially-reworked skills go through **`skill-creator`**; direct edits only for small fixes.
 - **Team-facing artifacts (human-task items, PR bodies, team comments) are written for cold readers** — template + rules in [`.claude/references/human-tasks.md`](.claude/references/human-tasks.md).
+- **Commits use Conventional Commits** (`type(scope): subject`); preserve `Co-Authored-By` and session trailers.
 
 ## How to verify (before any commit)
-- **Any change** → `bash scripts/check.sh` must exit 0 (config, permission-rule syntax, plugin-version parity, doc links, skill frontmatter + cleanliness, label-contract sync).
+- **Any change** → `bash scripts/check.sh` must exit 0 (config, permission-rule syntax, plugin-version parity, doc links, skill frontmatter + allowed-tools coverage + cleanliness, label-contract sync, monitor repo-set sync, leak grep).
+- **A skill change** → prove it by running it: one case per changed behavior in [`.claude/skill-eval/cases.csv`](.claude/skill-eval/cases.csv) (format documented there; any eval runner that reads it will do). Never ship a skill edit on a read-through.
 - **A worker-plugin change** → bump the plugin version and keep `plugin.json` ⇄ `marketplace.json` in sync (check.sh asserts parity).

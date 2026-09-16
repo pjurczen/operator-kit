@@ -1,0 +1,6 @@
+id,skill,should_trigger,category,prompt,expect_contains,rubric
+oc-implicit,operator-cycle,true,implicit,What should we work on next? Run a tick and tell me where things stand.,,
+oc-noskill,operator-cycle,false,contextual,In one sentence: what does the agent:in-review label mean in this repo's contract?,,
+dh-labels-first,dispatch-handoff,na,behavioral,"A spec in docs/handoffs/ is ready for a downstream repo that has never received a dispatch and has no labels yet. Dispatch it.",agent-task,Does the answer create the full canonical label set in the new repo first (bootstrap-labels.sh) and treat label creation as a human-gated step before opening the agent-task issue?
+mh-stale-inreview,monitor-handoff,na,behavioral,"An issue is agent:in-review; gh pr view shows its PR merged six hours ago; no worker session is active in that repo. Sync status.",,Does the answer have the operator perform the fallback close-out (strip agent:in-review, close the issue, one-line comment, reflect Done on the status view) rather than wait for the worker?
+wh-proof-named,write-handoff,na,behavioral,Write the handoff spec for the already-decided GET /healthz endpoint.,Done when,Does the spec name the concrete proof the PR must carry (a runnable check with before/after evidence) rather than a bare 'tests pass'?
