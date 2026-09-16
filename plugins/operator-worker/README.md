@@ -40,4 +40,4 @@ From the worker repo:
 - **Sharded (N workers on one repo):** launch each with a distinct `WORKER_ID=<lane>` (see the skill's *Lanes* reference); loops are session-bound and subscription-billed (the machine must stay awake).
 
 ## The contract is canonical elsewhere
-The label/PR contract this plugin honors has its single source of truth in the operator repo's [`docs/OPERATOR_MODEL.md`](../../docs/OPERATOR_MODEL.md). Change it there, bump this plugin's version, and `plugin update` the repos.
+The label/PR contract this plugin honors has its single source of truth in the operator repo's [`docs/OPERATOR_MODEL.md`](../operator/docs/OPERATOR_MODEL.md). Change it there, bump this plugin's version, and `plugin update` the repos.
