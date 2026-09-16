@@ -2,7 +2,8 @@
 # Verification checks for operator-kit.
 # This repo holds no product code; these guard its real failure modes:
 # config validity, permission-rule syntax, plugin-version drift, broken doc
-# links, skill frontmatter, skill cleanliness, and label-contract sync.
+# links, skill frontmatter, skill allowed-tools coverage, skill cleanliness,
+# label-contract sync, monitor repo-set sync, and a leak grep.
 # Usage: bash scripts/check.sh   (exit 0 = all checks pass)
 set -uo pipefail
 cd "$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
@@ -111,10 +112,12 @@ def _allow(path):
 allow_rules = _allow(".claude/settings.json") + _allow(".claude/settings.local.json")
 def _covered(tool):
     for r in allow_rules:
-        if r == tool or (r.endswith("*") and tool.startswith(r[:-1])): return True
+        if r == tool: return True
+        if r.endswith("*") and tool.startswith(r[:-1]): return True
+        if r.endswith(":*)") and tool.startswith(r[:-3]): return True   # Bash(x:*) covers Bash(x ...)
     return False
-tool_re = re.compile(r"^\s*-\s*(mcp__\S+)\s*$")
-gaps = []
+tool_re = re.compile(r"^\s*-\s*(mcp__\S+|Bash\([^)]*\))\s*$")
+gaps, seen_tools = [], 0
 for sf in sorted(skill_files):
     txt = open(sf, encoding="utf-8").read()
     if not txt.startswith("---"): continue
@@ -122,12 +125,14 @@ for sf in sorted(skill_files):
     if len(parts) < 3: continue
     for line in parts[1].splitlines():
         m = tool_re.match(line)
-        if m and not _covered(m.group(1)):
+        if not m: continue
+        seen_tools += 1
+        if not _covered(m.group(1)):
             gaps.append(f"{sf} -> {m.group(1)}")
 if gaps:
-    for g in gaps: err(f"skill MCP tool not granted by settings allow-list: {g}")
+    for g in gaps: err(f"skill tool not granted by settings allow-list: {g}")
 else:
-    ok("skill MCP allowed-tools all granted by settings allow-list")
+    ok(f"skill allowed-tools all granted by settings allow-list ({seen_tools} declared)")
 
 # 7. Skill cleanliness lint. Skills are clean, timeless procedures: no incident
 #    stories (inline #issue refs), no dated content, and a bounded body budget.
@@ -140,6 +145,8 @@ for f in lint_files:
     txt = open(f, encoding="utf-8").read()
     parts = txt.split("---", 2)
     body = parts[2] if (txt.startswith("---") and len(parts) >= 3) else txt
+    if "[[" in body:                                           # (d) wiki-link = a knowledge-store provenance leak
+        err(f"{f}: [[...]] link in body (the kit ships no store; cite inline or drop)")
     if f.endswith("SKILL.md"):
         n = len(issueref_re.findall(body))                     # (a) accretion cruft
         if n > 0:
@@ -197,9 +204,43 @@ if bad_lits:
 else:
     ok(f"contract label literals all canonical ({len(scan)} files)")
 
+# 8b. Monitor repo-set sync: the canonical markers in monitors.md must encode the
+#     same repo set as monitor-status.sh's repos= line, or the liveness check
+#     silently watches the wrong repos.
+try:
+    ms = open("scripts/monitor-status.sh", encoding="utf-8").read()
+    m = re.search(r'^repos="([^"]+)"', ms, re.M)
+    if not m:
+        err("monitor-status.sh: repos= line not found")
+    else:
+        seg = "+".join(sorted(r.split("/")[-1] for r in m.group(1).split()))
+        mons = open(".claude/references/monitors.md", encoding="utf-8").read()
+        drift = [t for t in ("label", "comment") if f"OPMON:all:{t}:{seg}" not in mons]
+        for t in drift:
+            err(f"monitors.md missing canonical marker OPMON:all:{t}:{seg} (repo-set drift vs monitor-status.sh)")
+        if not drift:
+            ok(f"monitor repo-set sync (markers ...:{seg})")
+except Exception as e:
+    err(f"monitor-set check error: {e}")
+
 sys.exit(1 if fail else 0)
 PY
 [ $? -ne 0 ] && fail=1
+
+# 9. Leak grep: nothing company-, people-, or secret-shaped may sit in tracked files.
+#    The kit is a shareable skeleton synced from a private instance; this is the
+#    choke-point guard so every future sync is checked mechanically, not by memory.
+leak_re='buyary|asana|posthog|pj@|christian|taylor|janelle|\bsk-|ghp_|xox[bp]-'
+hits=$(git ls-files -z | xargs -0 grep -n -i -E "$leak_re" -- 2>/dev/null \
+  | grep -v -E '^(LICENSE|scripts/check\.sh|plugins/operator-worker/\.claude-plugin/plugin\.json|\.claude-plugin/marketplace\.json):' \
+  | grep -v -F 'Asana / Linear' || true)
+if [ -n "$hits" ]; then
+  echo "FAIL: leak grep (company/people/secret-shaped strings in tracked files):"
+  printf '%s\n' "$hits"
+  fail=1
+else
+  echo "ok:   leak grep clean"
+fi
 
 if [ $fail -ne 0 ]; then echo "== CHECK FAILED =="; exit 1; fi
 echo "== ALL CHECKS PASSED =="; exit 0
