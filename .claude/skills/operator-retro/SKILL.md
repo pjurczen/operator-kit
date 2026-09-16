@@ -17,6 +17,7 @@ The operator improving the operator. The output is **edits, not a recap** — co
    - Skill/reference/CLAUDE.md changes that stop the failure **class**. Material skill reworks go through **`skill-creator`** (evals + trigger optimization; also the tool for eval-checking a skill that failed to fire); direct edits only for small targeted fixes. Vendored/worker skills stay generic (keep the cross-repo `operator-worker` skill free of any one repo's specifics); bump the plugin version when touched.
    - A session revealing a **repeatable process** worth reusing → author it as a skill via `skill-creator`, answering its questions yourself from the session; escalate only genuinely human-only calls. Keep the bar high.
    - **Land the operative rule** as a clean self-sufficient step in the owning skill (or CLAUDE.md for cross-cutting) — never the incident story; re-read the edited skill and strip leftover narrative; run `bash scripts/check.sh` (the lint is the verification arm); prune rules a later decision made obsolete.
+   - **A lesson lands three times:** story → [`docs/lessons/`](../../../docs/lessons/README.md) (or your knowledge store), rule → the owning skill or a check, pointer → memory — verify each landed ([`knowledge-store.md`](../../references/knowledge-store.md)).
    - Judge due bets in the decision log (verdict + reschedule/close the revisit).
    - Commit each fix as its own concern + push.
 4. **Report crisply:** reviewed → changed (commits) → **what needs a human**, kept separate, never buried.

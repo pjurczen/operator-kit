@@ -20,7 +20,7 @@ One tick of running operations: **sense → decide → act → track**. Honest a
 ## 1. Sense
 - Run **`monitor-handoff`** — in-flight state, comments, triage, merge gates, across ALL active repos.
 - Read your **living status doc** (**the current objective lives here**) + recent **decision log** (context + Revisit-due entries). Paths in [`CONFIG.md`](../../../CONFIG.md).
-- Ground the tick's focus in what's already known (prior decisions, features, handoffs) — once per new focus; re-ground on topic shift.
+- Ground the tick's focus in what's already known (prior decisions, features, handoffs, [`docs/lessons/`](../../../docs/lessons/README.md) or your knowledge store — [`knowledge-store.md`](../../references/knowledge-store.md); if the store is central and down, halt and say so) — once per new focus; re-ground on topic shift.
 - **Ground the standing objective's defining metric — DERIVED from the living status doc's current objective, never a remembered metric name.** The metric moves when the objective moves; a stale named metric grounds nothing. A quiet tick is the *cue* to ground it, not an excuse to skip.
 - Make sure `operator-retro` is scheduled to run nightly (a scheduled local run); re-create it if it's gone.
 

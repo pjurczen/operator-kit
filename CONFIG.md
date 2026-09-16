@@ -53,3 +53,9 @@ Enable the worker side in each downstream repo:
 
 ## 10 · Sensitive directories
 `.claude/settings.json` ships one deny rule as an example — `Read(./private/**)` — for a directory that must never reach a session's context (personal notes, exported transcripts, credentials). Point it at your own sensitive paths, or remove it; keep such directories gitignored as well, since a deny rule guards the session, not the repo.
+
+## 11 · Knowledge store (optional)
+By default the operator's knowledge is files: this repo's docs plus [`docs/lessons/`](docs/lessons/README.md), searched with `grep`. The disciplines — ground before asserting, fail-stop when central, write to the right place — are in [`.claude/references/knowledge-store.md`](.claude/references/knowledge-store.md). To bind an MCP-backed store instead (example: [`examples/gbrain.md`](examples/gbrain.md)), record:
+- **Server name:** `<mcp server>` · **tools to allow-list:** `<search, query, get_page, put_page>`
+- **Central?** `yes` → the operator halts when the store is unreachable; `no` → it degrades to files and says so
+- **Indexes:** `<docs/ …>` (read-only) · **Owns:** `<lessons/, meetings/, people/ …>` (store-native)

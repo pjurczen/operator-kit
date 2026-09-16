@@ -13,7 +13,7 @@ Turn a **decided** priority into a self-contained spec at `docs/handoffs/<YYYY-M
 2. **Above the design bar?** (per `designing-feature`'s bar) → a **human-approved design must exist** in `docs/features/`. Derive the spec from it and cite it — the design owns the cross-repo contract and named tradeoffs; the spec carries them to one repo.
 
 ## Procedure
-1. **Ground** on related decisions, prior specs, and any number you'll cite via [`data-sources.md`](../../references/data-sources.md) — verified data, never stale doc figures.
+1. **Ground** on related decisions, prior specs, lessons ([`docs/lessons/`](../../../docs/lessons/README.md) or your knowledge store), and any number you'll cite via [`data-sources.md`](../../references/data-sources.md) — verified data, never stale doc figures.
 2. **Mirror the existing analog.** If the feature has a likely analog in your repos (analytics wiring, auth, an integration, a UI pattern), find it and spec to it (`mirror <repo>/<path>`), not a generic approach. A "do it like `<repo>`" means the pattern exists — don't abandon the search on one flaky code-search result.
 3. **Verify every inlined artifact live** — URLs, endpoint paths, field names, symbols, *including anything you tell the worker to change, remove, or **reuse*** (grep the **target** repo; your shorthand for a thing is not proof of its name or location). The worker builds on — and writes tests enforcing — whatever you assert.
 4. **Write to the skeleton** — read [`references/spec-template.md`](references/spec-template.md) now and follow it, including its Validation and mock-consumer release-gate guidance.

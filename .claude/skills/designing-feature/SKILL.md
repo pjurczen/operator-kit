@@ -50,7 +50,7 @@ Work other lanes; don't let the gate rot into a silent default.
 ## Steps
 
 ### 1. Ground
-Pull what's already known before proposing anything: prior decisions in your decision log,
+Pull what's already known before proposing anything: prior decisions in your decision log, lessons ([`docs/lessons/`](../../../docs/lessons/README.md) or your knowledge store),
 `docs/features/` (does a design already cover this?), the roadmap + live repo state, and
 ground-truth any number you'll lean on ([`data-sources.md`](../../references/data-sources.md)).
 If the intent bundles several independent features, say so and split — each gets its own pass.
