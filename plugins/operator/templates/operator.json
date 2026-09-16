@@ -1,0 +1,4 @@
+{
+  "marketplace": "operator-kit",
+  "repos": ["<org>/repo-a", "<org>/repo-b"]
+}

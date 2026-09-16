@@ -1,0 +1,11 @@
+{
+  "name": "operator",
+  "description": "The operator side of operator-kit: skills that turn strategy into specs and dispatched GitHub issues (cycle, design, spec, dispatch, monitor, retro, status, opportunities), a session-start hook with live state, the verify gate, and /operator:init which scaffolds a host repo with CONFIG.md, docs/, lessons, references and the scripts/operator launcher.",
+  "version": "0.4.0",
+  "author": {
+    "name": "Piotr Jurczenko",
+    "email": "16348752+pjurczen@users.noreply.github.com"
+  },
+  "license": "MIT",
+  "keywords": ["operator", "dispatch", "orchestration", "multi-agent", "claude-code"]
+}

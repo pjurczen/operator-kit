@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# SessionStart hook for the operator plugin.
+# Injects the host's operator orientation (or the plugin's template when the host is not
+# scaffolded yet) plus a live-state snapshot (date, monitor liveness, uncommitted drift) as
+# additionalContext. Never blocks startup: every step degrades to a message; exit 0 always.
+set -uo pipefail
+
+PLUGIN_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$PWD}"
+export CLAUDE_PROJECT_DIR="$PROJECT_DIR"
+
+if [ -f "$PROJECT_DIR/.claude/operator-orientation.md" ]; then
+  orientation=$(cat "$PROJECT_DIR/.claude/operator-orientation.md" 2>&1 || echo "Error reading operator orientation")
+else
+  orientation=$(cat "$PLUGIN_ROOT/templates/operator-orientation.md" 2>&1 || echo "Error reading operator orientation")
+  orientation="${orientation}"$'\n\n'"(This repo is not scaffolded as an operator host yet — run /operator:init.)"
+fi
+
+monitors=$(cd "$PROJECT_DIR" 2>/dev/null && bash "$PLUGIN_ROOT/scripts/monitor-status.sh" 2>/dev/null | paste -sd' ' - || true)
+[ -n "$monitors" ] || monitors='monitor-status unavailable'
+
+uncommitted=$(cd "$PROJECT_DIR" 2>/dev/null && git status --short 2>/dev/null | head -15 | paste -sd';' - || true)
+
+payload="${orientation}
+
+## Live state at session start
+- Date: $(date +%F 2>/dev/null || true)
+- Monitors: ${monitors}
+- Uncommitted: ${uncommitted}"
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/\\n}"; s="${s//$'\r'/\\r}"; s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$(escape_for_json "$payload")"
+exit 0

@@ -1,14 +1,24 @@
 {
   "name": "operator-kit",
-  "description": "operator-kit: a Claude Code framework for an AI operator that turns strategy into dispatched GitHub-issue tasks for downstream worker repos. This marketplace ships the worker-side plugin.",
+  "description": "operator-kit: run a product team as a human-in-the-loop multi-agent workflow on Claude Code. This marketplace ships both sides: the operator plugin (decides, specs, dispatches, monitors) and the operator-worker plugin (picks up dispatched issues and drives them to merged PRs).",
   "owner": {
     "name": "Piotr Jurczenko",
     "email": "16348752+pjurczen@users.noreply.github.com"
   },
   "plugins": [
     {
+      "name": "operator",
+      "description": "The operator side of operator-kit: skills that turn strategy into specs and dispatched GitHub issues (cycle, design, spec, dispatch, monitor, retro, status, opportunities), a session-start hook with live state, the verify gate, and /operator:init which scaffolds a host repo with CONFIG.md, docs/, lessons, references and the scripts/operator launcher.",
+      "version": "0.4.0",
+      "source": "./plugins/operator",
+      "author": {
+        "name": "Piotr Jurczenko",
+        "email": "16348752+pjurczen@users.noreply.github.com"
+      }
+    },
+    {
       "name": "operator-worker",
-      "description": "Downstream worker side of the operator-kit dispatch pipeline: the working-agent-tasks + raising-issues skills and /work-queue command that pick up operator-dispatched `agent-task` GitHub issues and drive them to merged, closed-out PRs via the shared label/PR contract — attended or autonomous, using each repo's own development methodology.",
+      "description": "Downstream worker side of the operator-kit dispatch pipeline: the working-agent-tasks + raising-issues skills and /work-queue command that pick up operator-dispatched `agent-task` GitHub issues and drive them to merged, closed-out PRs via the shared label/PR contract \u2014 attended or autonomous, using each repo's own development methodology.",
       "version": "0.2.0",
       "source": "./plugins/operator-worker",
       "author": {

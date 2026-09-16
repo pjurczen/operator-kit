@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# scripts/operator — host-side launcher for the operator plugin's scripts (written by /operator:init).
+# Resolves the plugin's install path at RUN time, so `claude plugin update` never strands it and one
+# literal permission rule, Bash(bash scripts/operator:*), covers every plugin script.
+#   scripts/operator --root             print the resolved plugin root
+#   scripts/operator <name> [args...]   run bash <root>/scripts/<name>.sh [args...]
+set -euo pipefail
+
+resolve_root() {
+  if [ -n "${OPERATOR_PLUGIN_ROOT:-}" ]; then printf '%s\n' "$OPERATOR_PLUGIN_ROOT"; return 0; fi
+  local cfg="${CLAUDE_PROJECT_DIR:-$PWD}/.claude/operator.json"
+  local reg="${HOME}/.claude/plugins/installed_plugins.json"
+  [ -f "$reg" ] || { echo "operator: $reg not found — install the operator plugin first, or set OPERATOR_PLUGIN_ROOT" >&2; return 1; }
+  python3 - "$reg" "$cfg" "$PWD" <<'PY'
+import json, os, sys
+reg, cfg, cwd = sys.argv[1:4]
+mk = "operator-kit"
+if os.path.exists(cfg):
+    try: mk = json.load(open(cfg)).get("marketplace") or mk
+    except Exception: pass
+key = f"operator@{mk}"
+entries = [e for e in json.load(open(reg)).get("plugins", {}).get(key, [])
+           if os.path.isdir(e.get("installPath", ""))]
+if not entries:
+    sys.exit(f"operator: no installed entry for {key} in {reg} — enable the plugin in this project, or set OPERATOR_PLUGIN_ROOT")
+here = os.path.realpath(cwd)
+mine = [e for e in entries if os.path.realpath(e.get("projectPath") or "/nonexistent") == here]
+pick = mine[0] if mine else max(entries, key=lambda e: e.get("lastUpdated", ""))
+print(pick["installPath"])
+PY
+}
+
+case "${1:-}" in
+  --root) resolve_root ;;
+  ""|-h|--help) sed -n '2,6p' "$0" ;;
+  *) name="$1"; shift
+     root="$(resolve_root)"
+     script="$root/scripts/$name.sh"
+     [ -f "$script" ] || { echo "operator: no such plugin script: $script" >&2; exit 2; }
+     exec bash "$script" "$@" ;;
+esac
